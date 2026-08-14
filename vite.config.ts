@@ -30,9 +30,6 @@ export default defineConfig({
       }
     })
   ],
-  css: {
-    transformer: 'lightningcss',
-  },
   build: {
     target: ['es2015', 'edge88', 'firefox78', 'chrome87', 'safari13'],
     cssMinify: 'lightningcss'
