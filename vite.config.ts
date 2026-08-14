@@ -30,4 +30,7 @@ export default defineConfig({
       }
     })
   ],
+  build: {
+    target: ['es2015', 'edge88', 'firefox78', 'chrome87', 'safari13']
+  }
 })
