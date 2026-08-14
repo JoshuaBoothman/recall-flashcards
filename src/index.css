@@ -1,0 +1,21 @@
+@import "tailwindcss";
+@config "../tailwind.config.js";
+
+@layer base {
+  body {
+    @apply bg-background-light text-slate-900 transition-colors duration-300;
+  }
+  
+  .dark body {
+    @apply bg-background-dark text-slate-50;
+  }
+}
+
+/* Custom styles for hidden scrollbars to keep it clean */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
+}
