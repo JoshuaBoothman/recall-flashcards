@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, useNavigate } from 'react-router-dom';
 import { Lock, Moon, Sun, Library } from 'lucide-react';
 import { useStore } from './store/useStore';

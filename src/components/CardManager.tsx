@@ -1,7 +1,7 @@
 import React from 'react';
 import { useStore } from '../store/useStore';
 import type { Card } from '../store/useStore';
-import { Edit2, Trash2, ImageIcon } from 'lucide-react';
+import { Edit2, Trash2 } from 'lucide-react';
 
 interface CardManagerProps {
   onEditCard: (card: Card) => void;
