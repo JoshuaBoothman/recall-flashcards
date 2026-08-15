@@ -91,8 +91,16 @@ function App() {
   return (
     <Router>
       {/* Explicit parent div with 'dark' class guarantees Tailwind variants trigger on all children */}
-      <div className={isDarkMode ? 'dark' : ''}>
-        <div className="flex flex-col h-screen w-full overflow-hidden bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-50 transition-colors duration-300">
+      <div 
+        className={isDarkMode ? 'dark' : ''}
+        style={{ 
+          backgroundColor: isDarkMode ? '#0f172a' : '#f8fafc',
+          color: isDarkMode ? '#f8fafc' : '#0f172a',
+          minHeight: '100vh',
+          width: '100%'
+        }}
+      >
+        <div className="flex flex-col h-screen w-full overflow-hidden transition-colors duration-300">
           <TopBar />
           <main className="flex-1 overflow-y-auto no-scrollbar flex flex-col">
             <Routes>

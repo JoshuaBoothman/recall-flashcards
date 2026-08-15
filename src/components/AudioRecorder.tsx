@@ -26,7 +26,8 @@ export const AudioRecorder: React.FC<AudioRecorderProps> = ({ onAudioReady, onCl
       };
 
       mediaRecorderRef.current.onstop = () => {
-        const audioBlob = new Blob(audioChunksRef.current, { type: 'audio/webm' });
+        const mimeType = mediaRecorderRef.current?.mimeType || '';
+        const audioBlob = new Blob(audioChunksRef.current, { type: mimeType });
         const url = URL.createObjectURL(audioBlob);
         setAudioUrl(url);
         onAudioReady(audioBlob);
