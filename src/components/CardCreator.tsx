@@ -185,7 +185,7 @@ export const CardCreator: React.FC<CardCreatorProps> = ({ editCard, onCancelEdit
         
         <div className="flex-1 bg-primary-50 dark:bg-primary-900/10 rounded-lg p-2.5 border border-primary-100 dark:border-primary-900/50 flex items-center justify-between gap-2">
           <label className="text-xs font-bold text-primary-700 dark:text-primary-400 leading-tight">
-            Global Audio<br/><span className="text-[10px] font-medium opacity-80">(Plays on all faces)</span>
+            Card Audio<br/><span className="text-[10px] font-medium opacity-80">(Plays on all faces)</span>
           </label>
           <AudioRecorder 
             onAudioReady={(blob) => { setGlobalAudioBlob(blob); setExistingGlobalAudioUrl(undefined); }}

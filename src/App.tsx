@@ -72,22 +72,35 @@ function App() {
     const unlockAudio = () => initAudioContext();
     document.addEventListener('click', unlockAudio, { once: true });
     document.addEventListener('touchstart', unlockAudio, { once: true });
+    
+    // Also explicitly update the body background as a fallback for older WebKit
+    if (isDarkMode) {
+      document.documentElement.classList.add('dark');
+      document.body.style.backgroundColor = '#0f172a';
+    } else {
+      document.documentElement.classList.remove('dark');
+      document.body.style.backgroundColor = '#f8fafc';
+    }
+
     return () => {
       document.removeEventListener('click', unlockAudio);
       document.removeEventListener('touchstart', unlockAudio);
     };
-  }, []);
+  }, [isDarkMode]);
 
   return (
     <Router>
-      <div className={`flex flex-col h-screen w-full overflow-hidden bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-50 ${isDarkMode ? 'dark' : ''}`}>
-        <TopBar />
-        <main className="flex-1 overflow-y-auto no-scrollbar flex flex-col">
-          <Routes>
-            <Route path="/" element={<PatientMode />} />
-            <Route path="/carer" element={<CarerPortal />} />
-          </Routes>
-        </main>
+      {/* Explicit parent div with 'dark' class guarantees Tailwind variants trigger on all children */}
+      <div className={isDarkMode ? 'dark' : ''}>
+        <div className="flex flex-col h-screen w-full overflow-hidden bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-50 transition-colors duration-300">
+          <TopBar />
+          <main className="flex-1 overflow-y-auto no-scrollbar flex flex-col">
+            <Routes>
+              <Route path="/" element={<PatientMode />} />
+              <Route path="/carer" element={<CarerPortal />} />
+            </Routes>
+          </main>
+        </div>
       </div>
     </Router>
   )
