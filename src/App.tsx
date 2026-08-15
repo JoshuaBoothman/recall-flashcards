@@ -65,6 +65,8 @@ const TopBar = () => {
 };
 
 function App() {
+  const { isDarkMode } = useStore();
+  
   // Ensure Audio Context is at least created if suspended on first click anywhere
   useEffect(() => {
     const unlockAudio = () => initAudioContext();
@@ -78,7 +80,7 @@ function App() {
 
   return (
     <Router>
-      <div className="flex flex-col h-screen w-full overflow-hidden bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-50">
+      <div className={`flex flex-col h-screen w-full overflow-hidden bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-50 ${isDarkMode ? 'dark' : ''}`}>
         <TopBar />
         <main className="flex-1 overflow-y-auto no-scrollbar flex flex-col">
           <Routes>

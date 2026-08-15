@@ -17,10 +17,26 @@ const blobToBase64 = (blob: Blob): Promise<string> => {
   });
 };
 
-// Convert Base64 back to Blob
-const base64ToBlob = async (base64: string): Promise<Blob> => {
-  const res = await fetch(base64);
-  return await res.blob();
+// Convert Base64 back to Blob safely for older browsers (no fetch on data URLs)
+const base64ToBlob = (base64: string): Blob => {
+  const arr = base64.split(',');
+  const mime = arr[0].match(/:(.*?);/)?.[1] || '';
+  const bstr = atob(arr[1]);
+  let n = bstr.length;
+  const u8arr = new Uint8Array(n);
+  while (n--) {
+    u8arr[n] = bstr.charCodeAt(n);
+  }
+  return new Blob([u8arr], { type: mime });
+};
+
+const readFileAsText = (file: File): Promise<string> => {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () => resolve(reader.result as string);
+    reader.onerror = reject;
+    reader.readAsText(file);
+  });
 };
 
 export const exportData = async () => {
@@ -32,7 +48,6 @@ export const exportData = async () => {
     media: {}
   };
 
-  // Collect all media IDs used by cards
   const mediaIds = new Set<string>();
   state.cards.forEach(card => {
     if (card.globalAudioUrl) mediaIds.add(card.globalAudioUrl);
@@ -42,7 +57,6 @@ export const exportData = async () => {
     });
   });
 
-  // Fetch all media blobs and convert them
   for (const id of mediaIds) {
     const blob = await getMedia(id);
     if (blob) {
@@ -50,7 +64,6 @@ export const exportData = async () => {
     }
   }
 
-  // Generate file download
   const jsonString = JSON.stringify(dataToExport);
   const blob = new Blob([jsonString], { type: 'application/json' });
   const url = URL.createObjectURL(blob);
@@ -64,20 +77,18 @@ export const exportData = async () => {
 };
 
 export const importData = async (file: File) => {
-  const text = await file.text();
+  const text = await readFileAsText(file);
   const data = JSON.parse(text);
 
   if (!data.categories || !data.cards || !data.media) {
     throw new Error('Invalid backup file format');
   }
 
-  // Restore media to IndexedDB
   for (const [id, base64] of Object.entries(data.media)) {
-    const blob = await base64ToBlob(base64 as string);
+    const blob = base64ToBlob(base64 as string);
     await saveMedia(id, blob);
   }
 
-  // Fully replace Zustand store with imported data
   useStore.setState({
     categories: data.categories,
     cards: data.cards
